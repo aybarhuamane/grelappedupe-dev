@@ -21,10 +21,22 @@ backend/__pycache__/
 frontend/eva_ui/node_modules/
 frontend/eva-ui/node_modules/
 
+#NGINX
+
+nginx/ssl-cloudflare-bkp
+nginx/ssl-old
+nginx/ssl
+nginx/ssl1.2
+nginx/nginx-old.conf
+
 # BUILD / DIST OUTPUTS
 dist/
 build/
 
 # SYSTEM FILES
 Thumbs.db
+
+#SH
+
+run.sh
 
