@@ -1,0 +1,15 @@
+from .DirectorSerializer import DirectorSerializer, DirectorListSerializer
+from .TeachingSerializer import TeachingSerializer, TeachingListSerializer
+from .ModalitySerializer import ModalitySerializer
+from .EducationalLevelSerializer import EducationalLevelSerializer
+from .InstitutionSerializer import InstitutionSerializer, InstitutionListSerializer
+from .DetailInstitutionSerializer import DetailInstitutionSerializer, DetailInstitutionListSerializer, DetailInstitutionSerializerEvaluation
+from .DegreeSerializer import DegreeSerializer
+from .CourseSerializer import CourseSerializer
+from .CompetenceSerializer  import CompetenceSerializer
+from .CapacitySerializer import CapacitySerializer, CapacityListSerializer
+from .CategorySerializer import CategorySerializer
+from .CourseAssignmentSerializer import CourseAssignmentSerializer, CourseAssignmentListSerializer
+from .AreaSerializer import AreaSerializer
+from .StudentSerializer import StudentSerializer
+from .TeacherInstitutionAssignment import TeacherInstitutionAssignmentSerializer, TeacherInstitutionAssignmentListSerializer

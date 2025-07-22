@@ -1,0 +1,72 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: django
+    env_file: ./backend/.env
+    command: gunicorn --bind 0.0.0.0:8000 eva_api.wsgi:application
+    volumes:
+      - ./backend:/app/backend
+      - static_volume:/app/backend/static
+      - media_volume:/app/backend/media
+    expose:
+      - "8000"
+    depends_on:
+      - db
+    networks:
+      - eva-network
+  
+  frontend:
+    build:
+      context: ./frontend/eva_ui
+    container_name: nextjs
+    env_file:
+      - ./frontend/eva_ui/.env
+    expose:
+      - "3000"
+    depends_on:
+      - backend
+    networks:
+      - eva-network
+  
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "443:443" 
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+     # - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro  
+      - ./nginx/ssl-cert:/etc/nginx/ssl:ro
+      - ./web:/usr/share/nginx/html:ro
+      - static_volume:/static
+      - media_volume:/media
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - eva-network
+  
+  db:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_DB: eva_app_db
+      POSTGRES_USER: eva_user_db
+      POSTGRES_PASSWORD: Eva2026@2028
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - eva-network
+  
+volumes:
+  static_volume:
+  media_volume:
+  db_data:
+
+networks:
+  eva-network:
+    name: eva-network
+    driver: bridge

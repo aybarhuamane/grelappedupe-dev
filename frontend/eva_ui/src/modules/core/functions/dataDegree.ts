@@ -1,0 +1,45 @@
+export const optionsNumberDegree = [
+  { value: '1', numberText: '1', text: 'PRIMERO' },
+  { value: '2', numberText: '2', text: 'SEGUNDO' },
+  { value: '3', numberText: '3', text: 'TERCERO' },
+  { value: '4', numberText: '4', text: 'CUARTO' },
+  { value: '5', numberText: '5', text: 'QUINTO' },
+  { value: '6', numberText: '6', text: 'SEXTO' },
+]
+
+export const secundaryOptionsNumberDegree = [
+  { value: '1', numberText: '1', text: 'PRIMERO' },
+  { value: '2', numberText: '2', text: 'SEGUNDO' },
+  { value: '3', numberText: '3', text: 'TERCERO' },
+  { value: '4', numberText: '4', text: 'CUARTO' },
+  { value: '5', numberText: '5', text: 'QUINTO' },
+]
+
+export const sectionsLetters = [
+  { value: 'A', label: 'A' },
+  { value: 'B', label: 'B' },
+  { value: 'C', label: 'C' },
+  { value: 'D', label: 'D' },
+  { value: 'E', label: 'E' },
+  { value: 'F', label: 'F' },
+  { value: 'G', label: 'G' },
+  { value: 'H', label: 'H' },
+  { value: 'I', label: 'I' },
+  { value: 'J', label: 'J' },
+  { value: 'K', label: 'K' },
+  { value: 'L', label: 'L' },
+  { value: 'M', label: 'M' },
+  { value: 'N', label: 'N' },
+  { value: 'O', label: 'O' },
+  { value: 'P', label: 'P' },
+  { value: 'Q', label: 'Q' },
+  { value: 'R', label: 'R' },
+  { value: 'S', label: 'S' },
+  { value: 'T', label: 'T' },
+  { value: 'U', label: 'U' },
+  { value: 'V', label: 'V' },
+  { value: 'W', label: 'W' },
+  { value: 'X', label: 'X' },
+  { value: 'Y', label: 'Y' },
+  { value: 'Z', label: 'Z' },
+]

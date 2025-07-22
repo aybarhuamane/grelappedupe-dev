@@ -1,0 +1,30 @@
+####################
+# GIT
+.git
+.github
+.old-gitignore
+
+# GENERAL
+**/node_modules/
+**/.env
+**/.venv/
+*.log
+*.pyc
+.DS_Store
+
+# BACKEND
+backend/.env
+backend/.venv/
+backend/__pycache__/
+
+# FRONTEND
+frontend/eva_ui/node_modules/
+frontend/eva-ui/node_modules/
+
+# BUILD / DIST OUTPUTS
+dist/
+build/
+
+# SYSTEM FILES
+Thumbs.db
+

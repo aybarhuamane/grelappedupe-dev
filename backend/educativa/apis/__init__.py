@@ -1,0 +1,12 @@
+from .teachers import teachingList
+from .detailinstitution import detailinstitutionList
+from .teacherassignments import teacherassignmentsList
+from .importTeachers import importteachers
+from .importStudents import importstudents
+from .importinstitution import importinstitution
+from .courseassignments import courseassignmentList
+from .agregateStudent import agregatestudent
+from .directors import directorList
+from .teacherinstitutionassignment import teacherinstitutionassignmentList
+#porwer by
+from .powerbieducativa import powerbicategory, powerbiarea, powerbimodality, powerbieducationallevel, powerbiinstitution, powerbidetailinstitution,powerbidegree,powerbicourse,powerbicompetence,powerbicapacity,powerbicourseassignment,powerbistudent

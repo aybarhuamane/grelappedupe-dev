@@ -1,0 +1,411 @@
+"use client";
+
+import { personaFunctionsApi, resetPasswordFunctionApi } from "@/api";
+import { Button } from "@/components/ui/button";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useRole } from "@/modules/admin/hooks/useRole";
+import { LayoutFrmHorizontal } from "@/modules/core";
+import DialogConfirmacion from "@/modules/core/components/dialogos/confirmacion";
+import { getUser, person } from "@/types";
+import { IPersonPost } from "@/types/core/IPerson";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ResetIcon } from "@radix-ui/react-icons";
+import { Pencil } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import DualListBox from "react-dual-listbox";
+import "react-dual-listbox/lib/react-dual-listbox.css";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { z } from "zod";
+import { customIcons, lang } from "../dual-list-box/config-list-box";
+
+interface IFrmPersonProps {
+  personData?: getUser.IGetPersonList;
+  person_id?: number;
+}
+
+const PersonSchema = z.object({
+  name: z.string().min(3, { message: "El nombre es requerido" }),
+  last_name: z.string().min(3, "El apellido es requerido"),
+  num_document: z
+    .string()
+    .min(8, "El documento debe tener al menos 8 caracteres")
+    .max(22, "El documento debe tener maximo 22 caracteres")
+    .regex(/^\d+$/, "El documento debe ser numerico"),
+  phone: z.string().regex(/^\d+$/, "El telefono debe ser numerico").optional(),
+  email: z
+    .string()
+    .regex(
+      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+      "El email no es valido"
+    )
+    .optional(),
+  groups: z.array(z.string()).optional(),
+});
+
+export const FrmAddPersonAction = (props: IFrmPersonProps) => {
+  const { person_id, personData } = props;
+
+  const { createOrUpdatePerson } = personaFunctionsApi;
+  const router = useRouter();
+  const { listRole, getRoles } = useRole();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [errors, setErrors] = useState<{ [key: string]: string[] } | null>(
+    null
+  );
+  const [selected, setSelected] = useState<string[]>([]);
+
+  const [showDualList, setShowDualList] = useState(false);
+
+  const methods = useForm<z.infer<typeof PersonSchema>>({
+    resolver: zodResolver(PersonSchema),
+    defaultValues: {
+      name: personData?.name || "",
+      last_name: personData?.last_name || "",
+      num_document: personData?.num_document || "",
+      phone: personData?.phone || "",
+      email: personData?.email || "",
+      groups: personData?.user?.groups?.map((group) => group.name) || [],
+    },
+  });
+
+  const onSubmit = () => {
+    setIsOpen(true);
+  };
+
+  useEffect(() => {
+    getRoles();
+    if (personData) {
+      setSelected(
+        personData.user?.groups?.map((group) => group.id.toString()) || []
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [personData]);
+
+  const formattedRoles = listRole?.map((role) => ({
+    label: role.name,
+    value: role.id.toString(),
+  }));
+
+  const handleSubmit: SubmitHandler<person.IPersonList> = async (
+    data: person.IPersonList
+  ) => {
+    setIsOpen(false);
+
+    const newData: IPersonPost = {
+      num_document: data.num_document,
+      name: data.name,
+      last_name: data.last_name,
+      phone: data.phone || "",
+      email: data.email || "",
+      groups: selected,
+    };
+
+    try {
+      if (person_id) {
+        const res = await createOrUpdatePerson(newData, person_id);
+        if (res.ok) {
+          const data: person.IPersonList = await res.json();
+          if (data) {
+            toast.success(
+              `Persona actualizada correctamente con el id: ${person_id}`
+            );
+            methods.reset();
+            router.push("/admin/person-manange");
+          } else {
+            const data = await res.json();
+            if (data) {
+              setErrors(data);
+            }
+          }
+        }
+      } else {
+        const res = await createOrUpdatePerson(newData);
+        if (res.ok) {
+          const data: person.IPersonList = await res.json();
+          if (data) {
+            toast.success(`Persona creada correctamente con el id: ${data.id}`);
+            methods.reset();
+            router.push("/admin/person-manange");
+          }
+        } else {
+          const data = await res.json();
+          if (data) {
+            setErrors(data);
+          }
+        }
+      }
+    } catch (error) {
+      toast.error("Ocurrió un error inesperado");
+    }
+  };
+
+  const [isResetLoading, setResetIsLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const confirmResetPassword = async () => {
+    setResetIsLoading(true);
+    try {
+      if (person_id != undefined) {
+        const res = await resetPasswordFunctionApi.resetPassword(person_id);
+        if (res.ok) {
+          toast.success("Contraseña restablecida correctamente");
+        } else {
+          toast.error("Error al restablecer la contraseña");
+        }
+      }
+    } catch (error) {
+      console.error("Este es el error", error);
+      toast.error("Ocurrió un error inesperado");
+    } finally {
+      setResetIsLoading(false);
+      setIsDialogOpen(false);
+    }
+  };
+
+  const handleResetPassword = () => {
+    setIsDialogOpen(true);
+  };
+
+  return (
+    <main>
+      <FormProvider {...methods}>
+        <form
+          className="flex flex-col gap-8"
+          onSubmit={methods.handleSubmit(onSubmit)}
+        >
+          <LayoutFrmHorizontal
+            title="Datos de la persona"
+            subtitle="Ingrese los datos de la persona"
+          >
+            <section className="sm:grid sm:grid-cols-1 lg:grid lg:grid-cols-2 w-full gap-6">
+              <FormField
+                control={methods.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Nombre</Label>
+                    <FormControl>
+                      <Input
+                        id="name"
+                        type="text"
+                        className="h-10"
+                        placeholder="Ingrese el nombre"
+                        {...field}
+                        {...methods.register("name")}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={methods.control}
+                name="last_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Apellidos</Label>
+                    <FormControl>
+                      <Input
+                        id="last_name"
+                        type="text"
+                        className="h-10"
+                        placeholder="Ingrese el apellido"
+                        {...field}
+                        {...methods.register("last_name")}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={methods.control}
+                name="num_document"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Documento</Label>
+                    <FormControl>
+                      <Input
+                        id="num_document"
+                        type="text"
+                        className="h-10"
+                        placeholder="Ingrese el documento"
+                        {...field}
+                        {...methods.register("num_document")}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={methods.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Telefono</Label>
+                    <FormControl>
+                      <Input
+                        id="phone"
+                        type="text"
+                        className="h-10"
+                        placeholder="Ingrese el telefono"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>Este campo es opcional</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={methods.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Email</Label>
+                    <FormControl>
+                      <Input
+                        id="email"
+                        type="text"
+                        className="h-10"
+                        placeholder="Ingrese el email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </section>
+          </LayoutFrmHorizontal>
+
+          <LayoutFrmHorizontal
+            title="Datos del usuario"
+            subtitle="Ingrese los datos del usuario"
+          >
+            <section className="sm:grid sm:grid-cols-1 lg:grid lg:grid-cols-2 w-full gap-6">
+              {personData ? (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-end gap-4">
+                    <Label>Roles asignados</Label>
+                    <div className="flex gap-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowDualList(!showDualList)}
+                      >
+                        <Pencil className="w-5 h-5 pr-2" />
+                        {showDualList ? "Cancelar" : "Cambiar roles"}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {showDualList ? (
+                    <DualListBox
+                      options={formattedRoles || []}
+                      selected={selected}
+                      onChange={(newValue) => setSelected(newValue as string[])}
+                      icons={customIcons}
+                      lang={lang}
+                      showHeaderLabels
+                      className="text-sm"
+                    />
+                  ) : (
+                    <ul className="list-disc list-inside">
+                      {personData?.user?.groups?.map((group) => (
+                        <li key={group.id} className="text-sm text-gray-700">
+                          {group.name}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label>Asignar roles</Label>
+                  <DualListBox
+                    options={formattedRoles || []}
+                    selected={selected}
+                    onChange={(newValue) => setSelected(newValue as string[])}
+                    icons={customIcons}
+                    lang={lang}
+                    showHeaderLabels
+                    className="text-sm"
+                  />
+                  <FormDescription>
+                    Seleccione los roles que desea asignar a la persona. Este
+                    campo es opcional.
+                  </FormDescription>
+                </div>
+              )}
+            </section>
+          </LayoutFrmHorizontal>
+
+          <LayoutFrmHorizontal
+            title="Restablecer contraseña"
+            subtitle="Esta acción restablecerá la contraseña de la persona"
+          >
+            <div className="flex gap-4">
+              <Button
+                type="button"
+                variant="destructive"
+                size={"sm"}
+                onClick={handleResetPassword}
+                disabled={isResetLoading}
+              >
+                <ResetIcon className="w-5 h-5 pr-2" />
+                Restablecer contraseña
+              </Button>
+            </div>
+          </LayoutFrmHorizontal>
+
+          <div className="flex justify-end gap-4">
+            <Link href="/admin/person-manange">
+              <Button variant="outline">Cancelar</Button>
+            </Link>
+            <Button>{person_id ? "Actualizar" : "Crear"}</Button>
+          </div>
+        </form>
+      </FormProvider>
+      <DialogConfirmacion
+        tittleConfirm="Confirmar creación de persona"
+        description="¿Está seguro de crear la persona?"
+        aceppLabel="Aceptar"
+        isOpenConfirm={isOpen}
+        onCloseConfirm={() => setIsOpen(false)}
+        onSubmitConfirm={() =>
+          handleSubmit({
+            ...methods.getValues(),
+            id: person_id || 0,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            email: methods.getValues().email || "",
+            phone: methods.getValues().phone || "",
+          })
+        }
+      />
+      <DialogConfirmacion
+        tittleConfirm="Confirmar restablecimiento de contraseña"
+        description="¿Está seguro de restablecer la contraseña?"
+        isOpenConfirm={isDialogOpen}
+        onCloseConfirm={() => setIsDialogOpen(false)}
+        onSubmitConfirm={confirmResetPassword}
+      />
+    </main>
+  );
+};

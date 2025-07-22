@@ -1,0 +1,38 @@
+{
+  "node": {
+    "1c86f64c6cb532e80a8ae5ada97f008b6226d47d": {
+      "workers": {
+        "app/(auth)/login/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Froot%2Fproyecto-eva%2Ffrontend%2Feva_ui%2Fsrc%2Futils%2Ffuntions%2Factions.ts%22%2C%5B%22getCookie%22%2C%22createCookie%22%2C%22createCookieClient%22%2C%22deleteCookie%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/(auth)/login/page": "action-browser"
+      }
+    },
+    "81390872f01d8bde96ec49215de2218f80310556": {
+      "workers": {
+        "app/(auth)/login/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Froot%2Fproyecto-eva%2Ffrontend%2Feva_ui%2Fsrc%2Futils%2Ffuntions%2Factions.ts%22%2C%5B%22getCookie%22%2C%22createCookie%22%2C%22createCookieClient%22%2C%22deleteCookie%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/(auth)/login/page": "action-browser"
+      }
+    },
+    "89d1f13e02585d77e0f2becaa0282af8903eab7d": {
+      "workers": {
+        "app/(auth)/login/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Froot%2Fproyecto-eva%2Ffrontend%2Feva_ui%2Fsrc%2Futils%2Ffuntions%2Factions.ts%22%2C%5B%22getCookie%22%2C%22createCookie%22%2C%22createCookieClient%22%2C%22deleteCookie%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/(auth)/login/page": "action-browser"
+      }
+    },
+    "b1ac6a8bfaad98cc826d853be2ed746b637c5260": {
+      "workers": {
+        "app/(auth)/login/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Froot%2Fproyecto-eva%2Ffrontend%2Feva_ui%2Fsrc%2Futils%2Ffuntions%2Factions.ts%22%2C%5B%22getCookie%22%2C%22createCookie%22%2C%22createCookieClient%22%2C%22deleteCookie%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/(auth)/login/page": "action-browser"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "qoxmGirNnFMfkQKAP/N6OX+Jx4+51Ov+jdy7Sfg3U1M="
+}
