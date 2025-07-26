@@ -1,7 +1,7 @@
 
 # Proyecto EVA
 
-Este es el proyecto EVA, que incluye un backend construido con Django y un frontend con Next.js. La aplicación está dockerizada, lo que facilita la puesta en marcha en cualquier entorno. El frontend y el backend se comunican a través de la URL pública: [http://18.118.37.27/](http://18.118.37.27/).
+Este es el proyecto EVA, que incluye un backend construido con Django y un frontend con Next.js. La aplicación está dockerizada, lo que facilita la puesta en marcha en cualquier entorno. El frontend y el backend se comunican a través de la URL pública: [http://ip_public/](http://85.208.48.121/).
 
 ## Tabla de contenido
 
@@ -26,7 +26,7 @@ Antes de levantar el proyecto, asegúrate de que tienes Docker y Docker Compose 
 1. **Clona el repositorio**:
 
    ```bash
-   git clone https://github.com/devcloudperu/proyecto-eva.git
+   git clone https://github.com/aybarhuamane/grelappedupe-dev.git
    ```
 
 2. **Accede al directorio del proyecto**:
@@ -62,18 +62,20 @@ Antes de levantar el proyecto, asegúrate de que tienes Docker y Docker Compose 
    Debes ver algo como esto:
 
    ```bash
-   CONTAINER ID   IMAGE               COMMAND                  CREATED         STATUS         PORTS                                       NAMES
-   abc123def456   nginx:latest        "nginx -g 'daemon of…"   10 seconds ago  Up 8 seconds   0.0.0.0:80->80/tcp, :::80->80/tcp           nginx
-   xyz789ghi012   django-backend      "gunicorn myapp.wsgi…"   10 seconds ago  Up 9 seconds   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp   django-backend
-   jkl345mno678   nextjs-frontend     "npm start"              10 seconds ago  Up 8 seconds   0.0.0.0:3000->3000/tcp, :::3000->3000/tcp   nextjs-frontend
+CONTAINER ID   IMAGE                   COMMAND                  CREATED      STATUS      PORTS                                             NAMES
+49966daf9382   nginx:latest            "/docker-entrypoint.…"   5 days ago   Up 5 days   80/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp   nginx
+66e7c8d50488   postgres:16             "docker-entrypoint.s…"   7 days ago   Up 2 days   0.0.0.0:32777->5432/tcp, [::]:32777->5432/tcp     postgres
+9db97fd44e44   proyecto-eva-backend    "gunicorn --bind 0.0…"   8 days ago   Up 7 days   8000/tcp                                          django
+d1af82e5eac4   proyecto-eva-frontend   "docker-entrypoint.s…"   8 days ago   Up 7 days   3000/tcp                                          nextjs
+
    ```
 
 ## Cómo acceder a la aplicación
 
 Una vez que los contenedores estén corriendo, puedes acceder a la aplicación en:
 
-- **Frontend (Next.js)**: [http://18.118.37.27/](http://18.118.37.27/)
-- **Backend (Django API)**: [http://18.118.37.27/api/](http://18.118.37.27/api/)
+- **Frontend (Next.js)**: [http://ip_public/](http://85.208.48.121/)
+- **Backend (Django API)**: [http://ip_public/api/](http://85.208.48.121/api/)
 
 El frontend y backend están en la misma URL. Nginx gestiona las rutas para servir correctamente el frontend y las solicitudes de API.
 
@@ -89,7 +91,7 @@ Puedes verificar que los servicios están funcionando correctamente accediendo a
 - **Verificar que la API de Django está corriendo**:
 
    ```bash
-   curl http://18.118.37.27/api/
+   curl http://ip_public/api/
    ```
 
 ## Detalles adicionales
@@ -114,4 +116,4 @@ Puedes verificar que los servicios están funcionando correctamente accediendo a
 
 ### Contacto
 
-Si tienes alguna duda o problema con la configuración, puedes contactarme en [carevalo@devcloud.pe](mailto:carevalo@devcloud.pe).
+Si tienes alguna duda o problema con la configuración, puedes contactarme en [desarrollo@devcloud.pe](aybarhuamane@gmail.com).

@@ -55,9 +55,10 @@ services:
     environment:
       POSTGRES_DB: eva_app_db
       POSTGRES_USER: eva_user_db
-      POSTGRES_PASSWORD: Eva2026@2028
+      POSTGRES_PASSWORD: Eva2026@2028 
     volumes:
       - db_data:/var/lib/postgresql/data
+
     networks:
       - eva-network
   
