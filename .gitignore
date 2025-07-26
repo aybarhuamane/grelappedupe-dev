@@ -36,6 +36,8 @@ build/
 # SYSTEM FILES
 Thumbs.db
 
+destroy/
+
 #SH
 
 run.sh
